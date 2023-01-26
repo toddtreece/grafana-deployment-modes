@@ -37,36 +37,30 @@ func (s *Server) start(ctx context.Context) error {
 }
 
 func (s *Server) run(ctx context.Context) error {
-	conn, err := s.listener.Accept()
-	listenerErr := make(chan error, 1)
-	go func() {
-		for {
-			if err != nil {
-				listenerErr <- err
-			}
-			err = s.handler(conn)
-			if err != nil {
-				listenerErr <- err
-			}
+	for {
+		select {
+		case <-ctx.Done():
+			return nil
+		default:
 		}
-	}()
 
-	select {
-	case <-ctx.Done():
-		return nil
-	case err := <-listenerErr:
-		return err
+		conn, err := s.listener.Accept()
+		if err != nil {
+			return err
+		}
+		go s.handler(conn)
 	}
 }
 
-func (s *Server) handler(conn net.Conn) error {
-	buf := make([]byte, 1024)
-	_, err := conn.Read(buf)
-	if err != nil {
-		return err
+func (s *Server) handler(conn net.Conn) {
+	for {
+		buf := make([]byte, 1024)
+		_, err := conn.Read(buf)
+		if err != nil {
+			return
+		}
+		s.logger.Log(string(buf))
 	}
-	s.logger.Log(string(buf))
-	return nil
 }
 
 func (s *Server) stop(failure error) error {

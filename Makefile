@@ -2,8 +2,8 @@
 all: 
 	@go run .
 
-.PHONY: client
-client:
+.PHONY: sender
+sender:
 	@go run . -target sender
 
 .PHONY: server

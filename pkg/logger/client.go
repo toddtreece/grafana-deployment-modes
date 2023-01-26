@@ -53,5 +53,8 @@ func (c *Client) Log(msg string) {
 	_, err := c.conn.Write([]byte(msg))
 	if err != nil {
 		fmt.Println("error writing to connection: %w", err)
+
+		// attempt to reconnect
+		_ = c.start(context.Background())
 	}
 }

@@ -4,6 +4,7 @@ go 1.19
 
 require (
 	github.com/go-kit/log v0.2.1
+	github.com/google/uuid v1.1.2
 	github.com/grafana/dskit v0.0.0-20230120165636-649501dde2ca
 	github.com/weaveworks/common v0.0.0-20221201103051-7c2720a9024d
 )

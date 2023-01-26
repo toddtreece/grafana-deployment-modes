@@ -10,7 +10,7 @@ make all
 make server
 ```
 
-`-target client`
+`-target sender`
 ```
-make client
+make sender 
 ```
